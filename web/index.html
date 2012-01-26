@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <link rel="stylesheet" href="http://markdotto.com/bs2/bootstrap.css">
+    <link rel="stylesheet" href="http://markdotto.com/bs2/bootstrap-responsive.min.css">
+
+    <script type="text/javascript" src="/assets/jquery/jquery-1.7.1.min.js"></script>
+    <script type="text/javascript">
+      $(document).ready(function() {
+        $("a.cmd").click(function(e) {
+          var href = $(this).attr("href")
+          $.ajax(href, {
+            async: true,
+          })
+          e.preventDefault();
+          return false;
+        });
+      });
+    </script>
+  </head>
+  <body>
+    <div class="navbar navbar-fixed">
+      <div class="navbar-inner">
+        <div class="container">
+        </div>
+      </div>
+    </div>
+    <div class="container">
+      <h1>Remote Control</h1>
+      <br/>
+      <div class="row">
+        <div class="span6">
+          <div class="well">
+            <div class="btn-group">
+              <a class="btn cmd" href="/volup"><i class="icon volume-up"></i> up</a>
+              <a class="btn cmd" href="/voldown"><i class="icon volume-down"></i> down</a>
+              <a class="btn cmd" href="/mute"><i class="icon volume-off"></i> mute</a>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="span6">
+          <div class="well">
+            <div class="btn-group">
+              <a class="btn cmd" href="/blank">blank</a>
+            </div>
+            <div class="btn-group">
+              <a class="btn cmd" href="/screen/left">s-left</a>
+              <a class="btn cmd" href="/screen/both">s-both</a>
+              <a class="btn cmd" href="/screen/right">s-right</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>
