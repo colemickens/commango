@@ -1,6 +1,6 @@
-package commango
+package main
 
-import _ "fmt"
+import "fmt"
 import _ "flag"
 import "net/http"
 import "os/exec"
@@ -9,6 +9,8 @@ import "log"
 func commandHandler(cmd string, arg ...string) func(http.ResponseWriter, *http.Request) {
 	return func(rw http.ResponseWriter, req *http.Request) {
 		e := exec.Command(cmd, arg...)
+		fmt.Print(cmd, " ", arg)
+		fmt.Println()
 		e.Run()
 		http.Redirect(rw, req, "/", 302)
 	}
@@ -28,5 +30,5 @@ func main() {
 	err := http.ListenAndServe(":7777", nil)
 	if err != nil {
 		log.Fatal("ListenAndServe: ", err)
-	}	
+	}
 }
