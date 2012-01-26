@@ -6,11 +6,26 @@
 
     <script type="text/javascript" src="/assets/jquery/jquery-1.7.1.min.js"></script>
     <script type="text/javascript">
+      var ip_address = "";
+
       $(document).ready(function() {
+        // Well this was a waste...
+        // The, uh, server has access to requester's ip/port 
+        //
+        // $.ajax("http://jsonip.com/callback", {
+        //    dataType: "jsonp",
+        //    jsonpCallback: "callback",
+        //}).done(function(data) {
+        //  ip_address = data.ip;
+        //});
+
         $("a.cmd").click(function(e) {
           var href = $(this).attr("href")
           $.ajax(href, {
             async: true,
+            data: {
+              "ip": ip_address,
+            }
           })
           e.preventDefault();
           return false;
