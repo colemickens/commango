@@ -10,8 +10,10 @@ func commandHandler(cmd string, arg ...string) func(http.ResponseWriter, *http.R
 	return func(rw http.ResponseWriter, req *http.Request) {
 		e := exec.Command(cmd, arg...)
 		fmt.Println(req.RemoteAddr, ":", cmd, arg)
-		e.Run()
-		http.Redirect(rw, req, "/", 302)
+		//e.Run()
+		bytes, _ := e.CombinedOutput()
+		rw.Write(bytes)
+		//http.Redirect(rw, req, "/", 302)
 	}
 }
 

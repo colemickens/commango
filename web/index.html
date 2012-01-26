@@ -1,10 +1,19 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
+    <meta charset="utf-8">
+    <title>remote-go-me</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+
+    <meta name="description" content="">
+    <meta name="author" content="">
+
     <link rel="stylesheet" href="/assets/bootstrap/bootstrap.css">
     <link rel="stylesheet" href="/assets/bootstrap/bootstrap-responsive.css">
 
     <script type="text/javascript" src="/assets/jquery/jquery-1.7.1.min.js"></script>
+    <script type="text/javascript" src="/assets/handlebars/handlebars-1.0.0.beta.6.js"></script>
+    
     <script type="text/javascript">
       var ip_address = "";
 
@@ -19,18 +28,40 @@
         //  ip_address = data.ip;
         //});
 
+        var alert_template = Handlebars.compile($("#alert-template").html());
+        $("#alert-container .close").live("click", function() {
+          $(this).parent().fadeOut(function() {
+            $(this).remove();
+          });
+        });
+
         $("a.cmd").click(function(e) {
           var href = $(this).attr("href")
+          var fadeout = $(".alert").fadeOut();
           $.ajax(href, {
             async: true,
             data: {
               "ip": ip_address,
             }
-          })
+          }).done(function(data) {
+            $.when(fadeout).done(function() {
+              $("#alert-container").html(alert_template({"data": $.trim(data)}));
+              $(".alert").hide();
+              $(".alert").fadeIn();
+            });
+          });
           e.preventDefault();
           return false;
         });
       });
+    </script>
+    
+    <script id="alert-template" type="text/x-handlebars-template">
+      <div class="alert alert-info">
+      <a class="close">×</a>
+      <h4 class="alert-heading">Output</h4>
+        <div style="white-space:pre">{{ data }}</div>
+      </div>
     </script>
   </head>
   <body>
@@ -67,6 +98,8 @@
             </div>
           </div>
         </div>
+      </div>
+      <div id="alert-container">
       </div>
     </div>
   </body>
