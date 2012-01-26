@@ -1,4 +1,4 @@
-package main
+package commango
 
 import _ "fmt"
 import _ "flag"
