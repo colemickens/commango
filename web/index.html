@@ -8,27 +8,21 @@
     <meta name="description" content="">
     <meta name="author" content="">
 
-    <link rel="stylesheet" href="/assets/bootstrap/bootstrap.css">
-    <link rel="stylesheet" href="/assets/bootstrap/bootstrap-responsive.css">
+    <link rel="stylesheet" href="//twitter.github.com/bootstrap/assets/css/bootstrap.css">
+    <link rel="stylesheet" href="//twitter.github.com/bootstrap/assets/css/bootstrap-responsive.css">
 
-    <script type="text/javascript" src="/assets/jquery/jquery-1.7.1.min.js"></script>
-    <script type="text/javascript" src="/assets/handlebars/handlebars-1.0.0.beta.6.js"></script>
+    <script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
     
+    <script type="text/javascript" src="//akdubya.github.com/dustjs/lib/dust.js"></script>
+    <script type="text/javascript" src="//akdubya.github.com/dustjs/lib/parser.js"></script>
+    <script type="text/javascript" src="//akdubya.github.com/dustjs/lib/compiler.js"></script>
+
     <script type="text/javascript">
       var ip_address = "";
 
       $(document).ready(function() {
-        // Well this was a waste...
-        // The, uh, server has access to requester's ip/port 
-        //
-        // $.ajax("http://jsonip.com/callback", {
-        //    dataType: "jsonp",
-        //    jsonpCallback: "callback",
-        //}).done(function(data) {
-        //  ip_address = data.ip;
-        //});
+        var alert_template = dust.compileFn($("#alert-template").html());
 
-        var alert_template = Handlebars.compile($("#alert-template").html());
         $("#alert-container .close").live("click", function() {
           $(this).parent().fadeOut(function() {
             $(this).remove();
@@ -45,7 +39,9 @@
             }
           }).done(function(data) {
             $.when(fadeout).done(function() {
-              $("#alert-container").html(alert_template({"data": $.trim(data)}));
+              alert_template({"data": $.trim(data)}, function(err,out) {
+                $("#alert-container").html(out);
+              });
               $(".alert").hide();
               $(".alert").fadeIn();
             });
@@ -56,25 +52,19 @@
       });
     </script>
     
-    <script id="alert-template" type="text/x-handlebars-template">
+    <script id="alert-template" type="text/x-dustjs-template">
       <div class="alert alert-info">
-      <a class="close">×</a>
-      <h4 class="alert-heading">Output</h4>
-        <div style="white-space:pre">{{ data }}</div>
+        <a class="close">×</a>
+        <h4 class="alert-heading">Output</h4>
+        <div style="white-space:pre">{data}</div>
       </div>
     </script>
   </head>
   <body>
-    <div class="navbar navbar-fixed">
-      <div class="navbar-inner">
-        <div class="container">
-        </div>
-      </div>
-    </div>
-    <div class="container">
+    <div class="fluid-container">
       <h1>Remote Control</h1>
       <br/>
-      <div class="row">
+      <div class="fluid-row">
         <div class="span6">
           <div class="btn-toolbar well">
             <div class="btn-group">
@@ -82,10 +72,11 @@
               <a class="btn cmd" href="/voldown"><i class="icon volume-down"></i> down</a>
               <a class="btn cmd" href="/mute"><i class="icon volume-off"></i> mute</a>
             </div>
+            <div class="btn-group">
+              <a class="btn cmd" href="/killall/vlc">kill vlc</a>
+            </div>
           </div>
         </div>
-      </div>
-      <div class="row">
         <div class="span6">
           <div class="btn-toolbar well">
             <div class="btn-group">
